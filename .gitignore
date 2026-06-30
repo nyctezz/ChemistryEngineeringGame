@@ -1,0 +1,44 @@
+# IGNORE BUILD OUTPUT:
+build/
+cmake-build-*/
+out/
+bin/
+Debug/
+Release/
+
+# IGNORE CMAKE:
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+
+# IGNORE COMPILERS / OBJECT FILES:
+*.o
+*.obj
+*.a
+*.lib
+*.exe
+*.dll
+*.pdb
+*.so
+*.dylib
+
+# IGNORE VISUAL STUDIO / VS CODE:
+.vscode/
+*.code-workspace
+
+# IGNORE WINDOWS:
+Thumbs.db
+Desktop.ini
+
+# IGNORE CLION / OTHER IDEs:
+.idea/
+
+# IGNORE SDL / THIRD PARTY BUILDS:
+# (safe catch-all)
+external/**/build/
+external/**/CMakeFiles/
+
+# IGNORE LOGS / TEMP FILES:
+*.log
+*.tmp
