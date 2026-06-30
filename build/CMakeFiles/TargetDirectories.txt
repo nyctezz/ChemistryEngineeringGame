@@ -1,0 +1,8 @@
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/CMakeFiles/TinyEngine.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/CMakeFiles/edit_cache.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/CMakeFiles/rebuild_cache.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/external/SDL/CMakeFiles/SDL3-shared.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/external/SDL/CMakeFiles/SDL3_test.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/external/SDL/CMakeFiles/SDL_uclibc.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/external/SDL/CMakeFiles/edit_cache.dir
+C:/Users/igorb/Documents/ChemistryEngineeringGame/build/external/SDL/CMakeFiles/rebuild_cache.dir
