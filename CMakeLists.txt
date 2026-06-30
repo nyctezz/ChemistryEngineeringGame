@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(TinyEngine C)
+project(ChemistryEngineeringGame C)
 
 set(CMAKE_C_STANDARD 17)
 
 add_subdirectory(external/SDL)
 
-add_executable(TinyEngine
+add_executable(ChemistryEngineeringGame
     src/main.c
 )
 
-target_link_libraries(TinyEngine PRIVATE SDL3::SDL3)
+target_include_directories(ChemistryEngineeringGame PRIVATE
+    external/SDL/include
+)
+
+target_link_libraries(ChemistryEngineeringGame PRIVATE SDL3::SDL3)
