@@ -8,6 +8,8 @@ add_subdirectory(external/SDL)
 
 add_executable(ChemistryEngineeringGame
     src/main.c
+    src/core/window.c
+    src/core/application.c
 )
 
 target_include_directories(ChemistryEngineeringGame PRIVATE
