@@ -6,10 +6,12 @@
 #include <SDL3/SDL.h>
 
 #include "window.h"
+#include "renderer.h"
 
 
 typedef struct {
     _window window;
+    _renderer renderer;
 
     bool is_running;
     SDL_Event event;

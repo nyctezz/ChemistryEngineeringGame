@@ -3,6 +3,14 @@
 
 bool window_init(_window* window, const char* title, int width, int height, bool is_fullscreen)
 {
+    //OPENGL:
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+
+    //SDL window:
     window->handle = SDL_CreateWindow(title, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     SDL_SetWindowFullscreen(window->handle, is_fullscreen);
 
@@ -15,10 +23,8 @@ bool window_init(_window* window, const char* title, int width, int height, bool
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 void window_destroy(_window* window)
