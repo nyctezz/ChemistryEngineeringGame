@@ -9,7 +9,7 @@ void application_init(_application* app)
         abort();
     }
 
-    if (window_init(&app->window, "ChemistryEngineeringGame", 800, 600) == false)
+    if (window_init(&app->window, "ChemistryEngineeringGame", 800, 600, true) == false)
     {
         printf("Window creation failed: %s\n", SDL_GetError());
         abort();
@@ -18,19 +18,28 @@ void application_init(_application* app)
 
 void application_run(_application* app)
 {
-    bool running = true;
-    SDL_Event event;
+    app->is_running = true;
 
-    while (running)
+    while (app->is_running)
     {
-        while (SDL_PollEvent(&event))
+        SDL_PollEvent(&app->event);
+
+        switch (app->event.type)
         {
-            if (event.type == SDL_EVENT_QUIT)
-            {
-                running = 0;
-            }
+            case SDL_EVENT_QUIT:
+                app->is_running = false;
+                break;
+
+            case SDL_EVENT_WINDOW_RESIZED:
+                app->window.width = app->event.window.data1;
+                app->window.height = app->event.window.data2;
+                break;
         }
 
+
+
+
+       
         //SDL_Delay(16); // ~60 FPS cap
     }
 }

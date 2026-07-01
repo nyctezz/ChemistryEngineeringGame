@@ -10,6 +10,9 @@
 
 typedef struct {
     _window window;
+
+    bool is_running;
+    SDL_Event event;
 } _application;
 
 
