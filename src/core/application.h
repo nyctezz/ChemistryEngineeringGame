@@ -7,6 +7,7 @@
 
 #include "window.h"
 #include "renderer.h"
+#include "../graphics/shader.h"
 
 
 typedef struct {

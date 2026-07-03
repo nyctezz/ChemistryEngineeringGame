@@ -3,6 +3,12 @@
 
 int renderer_init(_renderer* renderer, _window* window)
 {
+    /* RETURNED ERROR CODES:
+    0 - success
+    1 - failed to create OpenGL context
+    2 - failed to initialize GLAD
+    */
+
     renderer->context = SDL_GL_CreateContext(window->handle);
 
     if (!renderer->context)

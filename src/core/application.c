@@ -3,6 +3,7 @@
 
 void application_init(_application* app)
 {
+    // window errors:
     if (!SDL_Init(SDL_INIT_VIDEO)) 
     {
         printf("SDL_Init failed: %s\n", SDL_GetError());
@@ -14,7 +15,10 @@ void application_init(_application* app)
         printf("Window creation failed: %s\n", SDL_GetError());
         abort();
     }
+    // ---
 
+
+    // rendering errors:
     switch (renderer_init(&app->renderer, &app->window))
     {
         case 1:
@@ -27,25 +31,12 @@ void application_init(_application* app)
             abort();
             break;
     }
+    // ---
 }
 
 void application_run(_application* app)
 {
     app->is_running = true;
-
-
-
-    //---
-    const char* vertexShaderSource = 
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 aPos;\n"
-        "void main() { gl_Position = vec4(aPos, 1.0); }";
-
-    const char* fragmentShaderSource = 
-        "#version 330 core\n"
-        "out vec4 FragColor;\n"
-        "void main() { FragColor = vec4(1.0, 0.5, 0.2, 1.0); }"; // Orange color
-
 
 
     // Define the triangle points (x, y, z)
@@ -73,28 +64,8 @@ void application_run(_application* app)
     glBindVertexArray(0);
 
 
-
-
-
-    // 1. Compile Vertex Shader
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    // 2. Compile Fragment Shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    // 3. Link Shaders into a Program
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    // 4. Cleanup (shaders are linked, we don't need them anymore)
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    _shader shader;
+    shader_init(&shader, "assets/shaders/default.vert", "assets/shaders/default.frag");
 
 
     //---
@@ -117,16 +88,14 @@ void application_run(_application* app)
                 break;
         }
 
-        //---
-
-        // Inside your while loop
         glClearColor(0.15f, 0.20f, 0.30f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT); 
 
-        // Activate the program
-        glUseProgram(shaderProgram); 
+        // use shader program
+        //glUseProgram(shaderProgram); 
+        shader_use(&shader);
 
-        // Render
+        // render
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
