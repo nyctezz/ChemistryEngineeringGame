@@ -30,6 +30,8 @@ void application_init(_application* app)
             printf("Failed to initialize GLAD\n");
             abort();
             break;
+
+        //[TODO]: finish writing error codes
     }
     // ---
 }
@@ -64,8 +66,8 @@ void application_run(_application* app)
     glBindVertexArray(0);
 
 
-    _shader shader;
-    shader_init(&shader, "assets/shaders/default.vert", "assets/shaders/default.frag");
+    //_shader shader;
+    //shader_init(&shader, "assets/shaders/default.vert", "assets/shaders/default.frag");
 
 
     //---
@@ -93,7 +95,8 @@ void application_run(_application* app)
 
         // use shader program
         //glUseProgram(shaderProgram); 
-        shader_use(&shader);
+        //shader_use(&shader);
+        renderer_run(&app->renderer);
 
         // render
         glBindVertexArray(VAO);
@@ -109,5 +112,6 @@ void application_run(_application* app)
 void application_destroy(_application* app)
 {
     window_destroy(&app->window);
+    renderer_destroy(&app->renderer);
     SDL_Quit();
 }

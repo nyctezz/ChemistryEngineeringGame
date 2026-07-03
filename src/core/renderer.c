@@ -21,7 +21,27 @@ int renderer_init(_renderer* renderer, _window* window)
         return 2;
     }
 
+    switch (shader_init(&renderer->shader, "assets/shaders/default.vert", "assets/shaders/default.frag"))
+    {
+        case 1:
+            return 3;
+        case 2:
+            return 4;
+
+        //[TODO]: finish up writing error codes later
+    }
+
     SDL_GL_SetSwapInterval(1); //vsync on
 
     return 0;
+}
+
+void renderer_run(_renderer* renderer)
+{
+    shader_use(&renderer->shader);
+}
+
+void renderer_destroy(_renderer* renderer)
+{
+    shader_destroy(&renderer->shader);
 }
