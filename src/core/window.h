@@ -13,5 +13,4 @@ typedef struct
 } _window;
 
 bool window_init(_window* window, const char* title, int width, int height, bool is_fullscreen);
-
 void window_destroy(_window* window);

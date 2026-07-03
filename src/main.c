@@ -3,11 +3,11 @@
 
 
 /*
-conventions I use:
+=-=-= conventions I use: =-=-=
 
--> if function can return different kinds of errors, 0 is success, {1, 2, ...} are error codes
+[1] function can return different kinds of errors, 0 is success, {1, 2, ...} are error codes
 
--> I use '_' before struct names e.g. _structname
+[2] I use '_' before struct names e.g. _structname
 */
 
 

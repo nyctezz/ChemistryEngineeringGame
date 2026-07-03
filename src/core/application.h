@@ -13,7 +13,6 @@
 typedef struct {
     _window window;
     _renderer renderer;
-
     bool is_running;
     SDL_Event event;
 } _application;
