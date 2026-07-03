@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <glad/glad.h>
 
 typedef struct {

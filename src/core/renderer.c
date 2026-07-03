@@ -7,6 +7,7 @@ int renderer_init(_renderer* renderer, _window* window)
     0 - success
     1 - failed to create OpenGL context
     2 - failed to initialize GLAD
+    3 - renderer error
     */
 
     renderer->context = SDL_GL_CreateContext(window->handle);
@@ -21,16 +22,13 @@ int renderer_init(_renderer* renderer, _window* window)
         return 2;
     }
 
-    switch (shader_init(&renderer->shader, "assets/shaders/default.vert", "assets/shaders/default.frag"))
+    if (shader_init(&renderer->shader, "assets/shaders/default.vert", "assets/shaders/default.frag") != 0)
     {
-        case 1:
-            return 3;
-        case 2:
-            return 4;
-
-        //[TODO]: finish up writing error codes later
+        return 3;
     }
+    
 
+    // set rendering options:
     SDL_GL_SetSwapInterval(1); //vsync on
 
     return 0;

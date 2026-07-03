@@ -5,7 +5,7 @@
 /*
 =-=-= conventions I use: =-=-=
 
-[1] function can return different kinds of errors, 0 is success, {1, 2, ...} are error codes
+[1] functions can return different kinds of errors, 0 is success, {1, 2, ...} are error codes
 
 [2] I use '_' before struct names e.g. _structname
 */
