@@ -31,7 +31,10 @@ void application_init(_application* app)
             abort();
             break;
 
-        //[TODO]: finish writing error codes
+        case 3:
+            printf("Failed to initialize renderer\n");
+            abort();
+            break;
     }
     // ---
 }
@@ -64,13 +67,6 @@ void application_run(_application* app)
     // Unbind to prevent accidental changes
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
-
-    //_shader shader;
-    //shader_init(&shader, "assets/shaders/default.vert", "assets/shaders/default.frag");
-
-
-    //---
 
 
 
