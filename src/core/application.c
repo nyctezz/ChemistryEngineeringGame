@@ -44,30 +44,22 @@ void application_run(_application* app)
     app->is_running = true;
 
 
-    // Define the triangle points (x, y, z)
+    //_gameobject object1;
+
+    
     float vertices[] = {
         -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
     };
 
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    uint32_t indices[] = {
+        0, 1, 2
+    };
+    
+    _mesh mesh;
 
-    // Bind and upload data
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Set attribute pointers (tells OpenGL how to read the buffer)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    // Unbind to prevent accidental changes
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
+    mesh_init(&mesh, vertices, sizeof(vertices) / sizeof(float), indices, sizeof(indices) / sizeof(uint32_t));
 
 
     while (app->is_running)
@@ -95,11 +87,10 @@ void application_run(_application* app)
         renderer_run(&app->renderer);
 
         // render
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
-
-        //---
+        //glBindVertexArray(VAO);
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        //glBindVertexArray(0);
+        mesh_draw(&mesh);
 
         SDL_GL_SwapWindow(app->window.handle);
     }
