@@ -21,13 +21,23 @@ add_executable(ChemistryEngineeringGame
     external/glad/src/glad.c
 )
 
+add_library(stb_image STATIC
+    external/stb/stb_image.c
+)
+
+target_include_directories(stb_image PUBLIC
+    external/stb
+)
+
 target_include_directories(ChemistryEngineeringGame PRIVATE
     external/SDL/include
     external/glad/include
+    external/stb
 )
 
 target_link_libraries(ChemistryEngineeringGame PRIVATE
     SDL3::SDL3
+    stb_image
 )
 
 # Automatically copy the assets folder to the build directory on compile

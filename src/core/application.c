@@ -17,7 +17,6 @@ void application_init(_application* app)
     }
     // ---
 
-
     // rendering errors:
     switch (renderer_init(&app->renderer, &app->window))
     {
