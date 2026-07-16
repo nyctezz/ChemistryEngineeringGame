@@ -21,12 +21,14 @@ void mesh_init(_mesh* mesh, float* vertices, size_t vertex_count, uint32_t* indi
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, index_count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
 
-    // Position attribute
-    // Assumes each vertex is: x y z
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Position attributes
+    // Attribute 0: Position (3 floats, stride = 5 * sizeof(float))
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glBindVertexArray(0);
+    // Attribute 1: Texture Coordinates (2 floats, stride = 5 * sizeof(float), offset = 3 floats)
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 }
 
 void mesh_draw(const _mesh* mesh)

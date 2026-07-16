@@ -8,8 +8,10 @@
 #include "window.h"
 #include "renderer.h"
 #include "../graphics/shader.h"
+#include "../graphics/texture.h"
 //#include "../game/gameobject.h"
 #include "mesh.h" //comment it out later (move to gameobject)
+
 
 typedef struct {
     _window window;

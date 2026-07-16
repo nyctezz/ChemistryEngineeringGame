@@ -15,6 +15,7 @@ add_executable(ChemistryEngineeringGame
 
     src/graphics/buffer.c
     src/graphics/shader.c
+    src/graphics/texture.c
 
     src/game/gameobject.c
 
