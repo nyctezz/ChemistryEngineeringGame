@@ -68,11 +68,16 @@ void application_run(_application* app)
         1, 2, 3
     };
     
-    _mesh mesh;
+    //_mesh mesh;
 
-    mesh_init(&mesh, vertices, sizeof(vertices) / sizeof(float), indices, sizeof(indices) / sizeof(uint32_t));
+    //mesh_init(&mesh, vertices, sizeof(vertices) / sizeof(float), indices, sizeof(indices) / sizeof(uint32_t));
     
-    uint32_t my_texture = texture_load_png("assets/textures/dude.png");
+    //uint32_t my_texture = texture_load_png("assets/textures/dude.png");
+
+
+    _mesh tile;
+    mesh_init_worldtile(&tile);
+    uint32_t my_texture = texture_load_png("assets/textures/debugTriTex3.png");
 
 
     while (app->is_running)
@@ -91,8 +96,9 @@ void application_run(_application* app)
                 update_viewport(&app->window);
                 break;
         }
-
-        glClearColor(0.15f, 0.20f, 0.30f, 1.0f);
+        
+        //glClearColor(0.15f, 0.20f, 0.30f, 1.0f);
+        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT); 
 
         renderer_run(&app->renderer);
@@ -100,7 +106,7 @@ void application_run(_application* app)
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
 
-        mesh_draw(&mesh);
+        mesh_draw(&tile);
 
         SDL_GL_SwapWindow(app->window.handle);
     }

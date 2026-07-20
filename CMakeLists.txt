@@ -8,6 +8,7 @@ add_subdirectory(external/SDL)
 
 add_executable(ChemistryEngineeringGame
     src/main.c
+
     src/core/window.c
     src/core/application.c
     src/core/renderer.c
@@ -18,6 +19,7 @@ add_executable(ChemistryEngineeringGame
     src/graphics/texture.c
 
     src/game/gameobject.c
+    src/game/worldtile.c
 
     external/glad/src/glad.c
 )
