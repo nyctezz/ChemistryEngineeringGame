@@ -41,43 +41,12 @@ void application_init(_application* app)
 void application_run(_application* app)
 {
     app->is_running = true;
-
-
-    //_gameobject object1;
-
-    
-    // Each line represents a vertex: Position (X, Y, Z) and Texture Coordinate (U, V)
-    /*float vertices[] = {
-        // Positions          // Texture Coords (UV)
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // Bottom-left
-        0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // Bottom-right
-        0.0f,  0.5f, 0.0f,   0.5f, 1.0f  // Top-center
-    };
-    */
    
-   float vertices[] = {
-        // Positions            // Texture Coords (UV)
-        -0.5f, -0.5f, 0.0f,     0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f,      1.0f, 0.0f,
-        -0.5f, 0.5f, 0.0f,      0.0f, 1.0f,
-        0.5f, 0.5f, 0.0f,       1.0f, 1.0f
-   };
-
-    uint32_t indices[] = {
-        0, 1, 2,
-        1, 2, 3
-    };
-    
-    //_mesh mesh;
-
-    //mesh_init(&mesh, vertices, sizeof(vertices) / sizeof(float), indices, sizeof(indices) / sizeof(uint32_t));
-    
-    //uint32_t my_texture = texture_load_png("assets/textures/dude.png");
 
 
-    _mesh tile;
-    mesh_init_worldtile(&tile);
-    uint32_t my_texture = texture_load_png("assets/textures/debugTriTex3.png");
+    _mesh obj;
+    mesh_init_quad(&obj);
+    uint32_t my_texture = texture_load_png("assets/textures/dude.png");
 
 
     while (app->is_running)
@@ -106,7 +75,7 @@ void application_run(_application* app)
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
 
-        mesh_draw(&tile);
+        mesh_draw(&obj);
 
         SDL_GL_SwapWindow(app->window.handle);
     }
