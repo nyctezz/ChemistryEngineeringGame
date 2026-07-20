@@ -11,6 +11,7 @@
 #include "../graphics/texture.h"
 //#include "../game/gameobject.h"
 #include "mesh.h" //comment it out later (move to gameobject)
+#include "../game/world/world.h"
 
 
 typedef struct {

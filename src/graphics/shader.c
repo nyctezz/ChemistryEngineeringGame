@@ -177,6 +177,24 @@ void shader_use(_shader* shader)
     glUseProgram(shader->shader_program);
 }
 
+void shader_set_vec2(_shader* shader, const char* name, float x, float y)
+{
+    GLint location = glGetUniformLocation(shader->shader_program, name);
+    if (location != -1)
+    {
+        glUniform2f(location, x, y);
+    }
+}
+
+void shader_set_int(_shader* shader, const char* name, int value)
+{
+    GLint location = glGetUniformLocation(shader->shader_program, name);
+    if (location != -1)
+    {
+        glUniform1i(location, value);
+    }
+}
+
 void shader_destroy(_shader* shader)
 {
     glDeleteProgram(shader->shader_program);

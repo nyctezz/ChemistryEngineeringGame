@@ -31,6 +31,7 @@ void mesh_init(_mesh* mesh, float* vertices, size_t vertex_count, uint32_t* indi
     glEnableVertexAttribArray(1);
 }
 
+/*
 void mesh_init_worldtile(_mesh* mesh)
 {
     //mirror:
@@ -49,6 +50,46 @@ void mesh_init_worldtile(_mesh* mesh)
         1.0f,  0.0f, 0.0f,          1.5f, 1.0f
     };
     
+
+    uint32_t indices[] = {
+        0, 1, 2,
+        0, 2, 3,
+        0, 3, 4,
+        0, 4, 5,
+        0, 5, 6,
+        0, 6, 1
+    };
+
+    mesh_init(mesh, vertices, sizeof(vertices) / sizeof(float), indices, sizeof(indices) / sizeof(uint32_t));
+}
+*/
+
+void mesh_init_hex(_mesh* mesh)
+{
+    float vertices[] = {
+        // Position                     // UV
+
+        // Center
+         0.0f,         0.0f,        0.0f,   0.5f, 0.5f,
+
+        // Top
+         0.0f,         1.0f,        0.0f,   0.5f, 1.0f,
+
+        // Top-right
+         0.8660254f,   0.5f,        0.0f,   0.9330127f, 0.75f,
+
+        // Bottom-right
+         0.8660254f,  -0.5f,        0.0f,   0.9330127f, 0.25f,
+
+        // Bottom
+         0.0f,        -1.0f,        0.0f,   0.5f, 0.0f,
+
+        // Bottom-left
+        -0.8660254f,  -0.5f,        0.0f,   0.0669873f, 0.25f,
+
+        // Top-left
+        -0.8660254f,   0.5f,        0.0f,   0.0669873f, 0.75f,
+    };
 
     uint32_t indices[] = {
         0, 1, 2,

@@ -42,6 +42,10 @@ void application_run(_application* app)
 {
     app->is_running = true;
    
+    _world world;
+
+    world_init(&world, 5, 5);
+    world_generate(&world);
 
 
     _mesh obj;
@@ -70,7 +74,7 @@ void application_run(_application* app)
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT); 
 
-        renderer_run(&app->renderer);
+        renderer_run(&app->renderer, &world);
 
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
@@ -83,6 +87,8 @@ void application_run(_application* app)
     
 void application_destroy(_application* app)
 {
+    //world_destroy(&world);
+
     window_destroy(&app->window);
     renderer_destroy(&app->renderer);
     SDL_Quit();
