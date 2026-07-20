@@ -19,6 +19,7 @@ typedef struct
 
 void mesh_init(_mesh* mesh, float* vertices, size_t vertex_count, uint32_t* indices, size_t index_count);
 void mesh_init_worldtile(_mesh* mesh);
+void mesh_init_hex(_mesh* mesh);
 void mesh_init_quad(_mesh* mesh);
 void mesh_draw(const _mesh* mesh);
 void mesh_destroy(_mesh* mesh);

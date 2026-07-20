@@ -49,11 +49,12 @@ int renderer_init(_renderer* renderer, _window* window)
     {
         return 3;
     }
-    
 
+    shader_use(&renderer->shader);
+    shader_set_int(&renderer->shader, "ourTexture", 0);
+    
     // set rendering options:
     SDL_GL_SetSwapInterval(1); //vsync on
-
 
     // set up viewport on window properly:
     update_viewport(window);
@@ -62,15 +63,76 @@ int renderer_init(_renderer* renderer, _window* window)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+
+    //TODO: write correct error handling for this:
+
+    mesh_init_hex(&renderer->hex_mesh);
+
+    renderer->grass_texture = texture_load_png("assets/textures/debug.png");
+    renderer->water_texture = texture_load_png("assets/textures/debug.png");
+    renderer->rock_texture  = texture_load_png("assets/textures/debug.png");
+
     return 0;
 }
 
-void renderer_run(_renderer* renderer)
+void renderer_draw_tile(_renderer* renderer, _tile* tile, int tile_x, int tile_y)
+{
+    float world_x;
+    float world_y;
+
+    hex_to_world(tile_x, tile_y, &world_x, &world_y);
+
+    glActiveTexture(GL_TEXTURE0);
+    switch(tile->type)
+    {
+        case TILE_GRASS:
+            glBindTexture(GL_TEXTURE_2D, renderer->grass_texture);
+            break;
+
+        case TILE_WATER:
+            glBindTexture(GL_TEXTURE_2D, renderer->water_texture);
+            break;
+
+        case TILE_ROCK:
+            glBindTexture(GL_TEXTURE_2D, renderer->rock_texture);
+            break;
+    }
+
+    shader_set_vec2(&renderer->shader, "uTranslation", world_x, world_y);
+
+    mesh_draw(&renderer->hex_mesh);
+}
+
+#define HEX_RADIUS 1.0f
+
+void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
+{
+    *world_x = HEX_RADIUS * 1.5f * tile_x;
+    *world_y = HEX_RADIUS * (sqrtf(3.0f) * (0.5f * tile_x - tile_y));
+}
+
+void renderer_run(_renderer* renderer, _world* world)
 {
     shader_use(&renderer->shader);
+
+    for (int y = 0; y < world->height; y++)
+    {
+        for (int x = 0; x < world->width; x++)
+        {
+            _tile* tile = world_get_tile(world, x, y);
+
+            renderer_draw_tile(renderer, tile, x, y);
+        }
+    }
 }
 
 void renderer_destroy(_renderer* renderer)
 {
+    mesh_destroy(&renderer->hex_mesh);
+
+    glDeleteTextures(1, &renderer->grass_texture);
+    glDeleteTextures(1, &renderer->water_texture);
+    glDeleteTextures(1, &renderer->rock_texture);
+
     shader_destroy(&renderer->shader);
 }

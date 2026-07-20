@@ -19,6 +19,8 @@ add_executable(ChemistryEngineeringGame
     src/graphics/texture.c
 
     src/game/gameobject.c
+    src/game/world/world.c
+    src/game/world/tile.c
 
     external/glad/src/glad.c
 )
