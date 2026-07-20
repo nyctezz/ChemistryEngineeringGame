@@ -58,6 +58,10 @@ int renderer_init(_renderer* renderer, _window* window)
     // set up viewport on window properly:
     update_viewport(window);
 
+    // enable alpha blending for transparency:
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     return 0;
 }
 

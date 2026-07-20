@@ -72,7 +72,7 @@ void application_run(_application* app)
 
     mesh_init(&mesh, vertices, sizeof(vertices) / sizeof(float), indices, sizeof(indices) / sizeof(uint32_t));
     
-    uint32_t my_texture = texture_load_png("assets/textures/debug.png");
+    uint32_t my_texture = texture_load_png("assets/textures/dude.png");
 
 
     while (app->is_running)
