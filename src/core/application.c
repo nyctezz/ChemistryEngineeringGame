@@ -10,7 +10,7 @@ void application_init(_application* app)
         abort();
     }
 
-    if (!window_init(&app->window, "ChemistryEngineeringGame", 800, 600, false))
+    if (window_init(&app->window, "ChemistryEngineeringGame", 800, 600, false) == 1)
     {
         printf("Window creation failed: %s\n", SDL_GetError());
         abort();
@@ -54,6 +54,7 @@ void application_run(_application* app)
         0.0f,  0.5f, 0.0f,   0.5f, 1.0f  // Top-center
     };
     */
+   
    float vertices[] = {
         // Positions            // Texture Coords (UV)
         -0.5f, -0.5f, 0.0f,     0.0f, 0.0f,
@@ -87,7 +88,7 @@ void application_run(_application* app)
             case SDL_EVENT_WINDOW_RESIZED:
                 app->window.width = app->event.window.data1;
                 app->window.height = app->event.window.data2;
-                glViewport(0, 0, app->window.width, app->window.height);
+                update_viewport(&app->window);
                 break;
         }
 

@@ -13,6 +13,7 @@ typedef struct
     _shader shader;
 } _renderer;
 
+void update_viewport(_window* window);
 int renderer_init(_renderer* renderer, _window* window);
 void renderer_run(_renderer* renderer);
 void renderer_destroy(_renderer* renderer);

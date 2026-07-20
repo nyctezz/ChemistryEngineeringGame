@@ -1,6 +1,29 @@
 #include "renderer.h"
 
 
+void update_viewport(_window* window)
+{
+    int width = window->width;
+    int height = window->height;
+
+    int viewport_size;
+
+    if (width < height)
+    {
+        viewport_size = width;
+    }
+    else
+    {
+        viewport_size = height;
+    }
+
+    int x_offset = (width - viewport_size) / 2;
+    int y_offset = (height - viewport_size) / 2;
+
+    glViewport(x_offset, y_offset, viewport_size, viewport_size);
+}
+
+
 int renderer_init(_renderer* renderer, _window* window)
 {
     /* RETURNED ERROR CODES:
@@ -30,6 +53,10 @@ int renderer_init(_renderer* renderer, _window* window)
 
     // set rendering options:
     SDL_GL_SetSwapInterval(1); //vsync on
+
+
+    // set up viewport on window properly:
+    update_viewport(window);
 
     return 0;
 }

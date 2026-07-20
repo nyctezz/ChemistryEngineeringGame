@@ -13,20 +13,19 @@ bool window_init(_window* window, const char* title, int width, int height, bool
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-
     //create SDL window:
     window->handle = SDL_CreateWindow(title, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+
+    if (window->handle == NULL)
+    {
+        return 1;
+    }
+
     SDL_SetWindowFullscreen(window->handle, is_fullscreen);
 
     window->width = width;
     window->height = height;
     window->is_fullscreen = is_fullscreen;
-
-
-    if (window->handle != NULL)
-    {
-        return 1;
-    }
 
     return 0;
 }
