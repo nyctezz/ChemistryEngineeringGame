@@ -38,6 +38,7 @@ target_include_directories(stb_image PUBLIC
 target_include_directories(ChemistryEngineeringGame PRIVATE
     external/SDL/include
     external/glad/include
+    external/cglm/include
     external/stb
 )
 

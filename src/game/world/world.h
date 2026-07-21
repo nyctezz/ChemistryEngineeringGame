@@ -7,7 +7,7 @@
 
 typedef struct {
 
-    int width; //number of tiles
+    int width; //in number of tiles
     int height;
 
     _tile* tiles;

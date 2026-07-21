@@ -15,12 +15,12 @@ void world_init(_world* world, int width, int height)
 
     if (world->tiles == NULL)
     {
-        printf("Failed to allocate world.\n");
+        printf("Failed to allocate memory for world.\n");
         abort();
     }
 }
 
-void world_generate(_world* world)
+void world_generate(_world* world) //later make this generate procedurally
 {
     for (int y = 0; y < world->height; y++)
     {

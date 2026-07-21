@@ -1,7 +1,7 @@
 #include "shader.h"
 
 
-// helper functions:
+// local helper functions:
 static char* read_shader_file(const char* path) 
 {
     FILE* file = fopen(path, "rb");
@@ -76,7 +76,6 @@ static int check_linking_errors(unsigned int shader)
     return 0;
 }
 // ---
-
 
 int shader_init(_shader* shader, const char* vert_shader_path, const char* frag_shader_path)
 {
@@ -186,12 +185,12 @@ void shader_set_vec2(_shader* shader, const char* name, float x, float y)
     }
 }
 
-void shader_set_mat4(_shader* shader, const char* name, const float* matrix)
+void shader_set_mat4(_shader* shader, const char* name, mat4 matrix)
 {
     GLint location = glGetUniformLocation(shader->shader_program, name);
     if (location != -1)
     {
-        glUniformMatrix4fv(location, 1, GL_FALSE, matrix);
+        glUniformMatrix4fv(location, 1, GL_FALSE, (GLfloat*)matrix);
     }
 }
 
