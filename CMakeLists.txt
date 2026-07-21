@@ -11,6 +11,7 @@ add_executable(ChemistryEngineeringGame
 
     src/core/window.c
     src/core/application.c
+    src/core/time.c
     src/core/renderer.c
     src/core/mesh.c
     src/core/camera.c

@@ -36,6 +36,40 @@ void application_init(_application* app)
             break;
     }
     // ---
+
+    timer_init(&app->timer);
+}
+
+void application_process_events(_application* app)
+{
+    while (SDL_PollEvent(&app->event))
+    {
+        switch (app->event.type)
+        {
+            case SDL_EVENT_QUIT:
+                app->is_running = false;
+                break;
+
+            case SDL_EVENT_WINDOW_RESIZED:
+            {
+                int width  = app->event.window.data1;
+                int height = app->event.window.data2;
+
+                if (width > 0 && height > 0)
+                {
+                    app->window.width = width;
+                    app->window.height = height;
+
+                    update_viewport(&app->window);
+                }
+
+                break;
+            }
+
+            default:
+                break;
+        }
+    }
 }
 
 void application_run(_application* app)
@@ -48,12 +82,7 @@ void application_run(_application* app)
 
 
     _camera camera;
-    camera_init(&camera);
-
-    int center_x = (world.width - 1) / 2;
-    int center_y = (world.height - 1) / 2;
-    camera.x = 1.5f * center_x;
-    camera.y = 0.8660254f * ((0.5f * center_x) - center_y);
+    camera_init(&camera, 0.0f, 0.0f, 5.0f, 4.0f);
 
 
     _mesh obj;
@@ -61,42 +90,19 @@ void application_run(_application* app)
     uint32_t my_texture = texture_load_png("assets/textures/dude.png");
 
 
-    uint64_t previous_time = SDL_GetTicks();
-
     while (app->is_running)
     {
-        uint64_t current_time = SDL_GetTicks();
-        float delta_time = (float)(current_time - previous_time) / 1000.0f;
-        previous_time = current_time;
+        app->timer.delta_time = timer_get_delta_time(&app->timer);
 
-
-        SDL_PollEvent(&app->event);
-
-        switch (app->event.type)
-        {
-            case SDL_EVENT_QUIT:
-                app->is_running = false;
-                break;
-
-            case SDL_EVENT_WINDOW_RESIZED:
-                app->window.width = app->event.window.data1;
-                app->window.height = app->event.window.data2;
-                update_viewport(&app->window);
-                break;
-        }
-        
-        //glClearColor(0.15f, 0.20f, 0.30f, 1.0f);
-        glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT); 
-
-        camera_update(&camera, delta_time);
-
+        application_process_events(app);
+        camera_update(&camera, app->timer.delta_time);
         renderer_run(&app->renderer, &world, &camera, &app->window);
 
+        // temporarily draw mesh manually, later wrap it in gameobject and renderer
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
-
-        //mesh_draw(&obj);
+        mesh_draw(&obj);
+        // ---
 
         SDL_GL_SwapWindow(app->window.handle);
     }

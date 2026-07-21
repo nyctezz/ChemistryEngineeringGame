@@ -11,7 +11,6 @@ typedef struct
     float zoom;
 } _camera;
 
-void camera_init(_camera* camera);
-
+void camera_init(_camera* camera, float starting_x, float starting_y, float speed, float starting_zoom);
 void camera_handle_event(_camera* camera, SDL_Event* event);
 void camera_update(_camera* camera, float delta_time);

@@ -1,2 +1,0 @@
-map is made out of equitorial hexagons that consist of 6 equitorial triangles. To achieve near perfect pixel art, I assume that a bottom (and top) triangle has base equal to 15 (odd to have a middle) and height of 13.
-To perfectly fit a whole hexagon on a .png, we need 30px by 26px

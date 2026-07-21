@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-
+//TODO: cleanup (minly math functions to math.c)
 
 static void mat4_ortho(float* m, float left, float right, float bottom, float top, float near, float far)
 {
@@ -148,6 +148,11 @@ void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
 
 void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
 {
+    //set background color and clear the screen:
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+
     shader_use(&renderer->shader);
 
     float aspect = (float)window->width / (float)window->height;

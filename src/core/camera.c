@@ -2,19 +2,18 @@
 
 #include <math.h>
 
-void camera_init(_camera* camera)
+void camera_init(_camera* camera, float starting_x, float starting_y, float speed, float starting_zoom)
 {
-    camera->x = 0.0f;
-    camera->y = 0.0f;
+    camera->x = starting_x;
+    camera->y = starting_y;
 
-    camera->speed = 5.0f;
-    camera->zoom = 4.0f;
+    camera->speed = speed;
+    camera->zoom = starting_zoom;
 }
 
 void camera_handle_event(_camera* camera, SDL_Event* event)
 {
     // Currently no event-based input is necessary.
-    //
     // I will use SDL_GetKeyboardState() in camera_update()
 }
 
