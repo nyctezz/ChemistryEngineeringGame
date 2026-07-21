@@ -31,5 +31,5 @@ void update_viewport(_window* window);
 int renderer_init(_renderer* renderer, _window* window);
 void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y);
 void renderer_draw_tile(_renderer* renderer, _camera* camera, _tile* tile, int tile_x, int tile_y);
-void renderer_run(_renderer* renderer, _world* world, _camera* camera);
+void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window);
 void renderer_destroy(_renderer* renderer);

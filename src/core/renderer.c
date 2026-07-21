@@ -1,26 +1,61 @@
 #include "renderer.h"
 
 
+
+static void mat4_ortho(float* m, float left, float right, float bottom, float top, float near, float far)
+{
+    float rl = right - left;
+    float tb = top - bottom;
+    float fn = far - near;
+
+    m[0] = 2.0f / rl;
+    m[1] = 0.0f;
+    m[2] = 0.0f;
+    m[3] = 0.0f;
+
+    m[4] = 0.0f;
+    m[5] = 2.0f / tb;
+    m[6] = 0.0f;
+    m[7] = 0.0f;
+
+    m[8] = 0.0f;
+    m[9] = 0.0f;
+    m[10] = -2.0f / fn;
+    m[11] = 0.0f;
+
+    m[12] = -(right + left) / rl;
+    m[13] = -(top + bottom) / tb;
+    m[14] = -(far + near) / fn;
+    m[15] = 1.0f;
+}
+
+static void mat4_translate(float* m, float x, float y, float z)
+{
+    m[0] = 1.0f;
+    m[1] = 0.0f;
+    m[2] = 0.0f;
+    m[3] = 0.0f;
+
+    m[4] = 0.0f;
+    m[5] = 1.0f;
+    m[6] = 0.0f;
+    m[7] = 0.0f;
+
+    m[8] = 0.0f;
+    m[9] = 0.0f;
+    m[10] = 1.0f;
+    m[11] = 0.0f;
+
+    m[12] = x;
+    m[13] = y;
+    m[14] = z;
+    m[15] = 1.0f;
+}
+
+
 void update_viewport(_window* window)
 {
-    int width = window->width;
-    int height = window->height;
-
-    int viewport_size;
-
-    if (width < height)
-    {
-        viewport_size = width;
-    }
-    else
-    {
-        viewport_size = height;
-    }
-
-    int x_offset = (width - viewport_size) / 2;
-    int y_offset = (height - viewport_size) / 2;
-
-    glViewport(x_offset, y_offset, viewport_size, viewport_size);
+    glViewport(0, 0, window->width, window->height);
 }
 
 
@@ -82,10 +117,6 @@ void renderer_draw_tile(_renderer* renderer, _camera* camera, _tile* tile, int t
 
     hex_to_world(tile_x, tile_y, &world_x, &world_y);
 
-    // Apply camera
-    world_x -= camera->x;
-    world_y -= camera->y;
-
     glActiveTexture(GL_TEXTURE0);
     switch(tile->type)
     {
@@ -102,7 +133,7 @@ void renderer_draw_tile(_renderer* renderer, _camera* camera, _tile* tile, int t
             break;
     }
 
-    shader_set_vec2( &renderer->shader, "uTranslation", world_x, world_y);
+    shader_set_vec2(&renderer->shader, "uTranslation", world_x, world_y);
 
     mesh_draw(&renderer->hex_mesh);
 }
@@ -115,16 +146,28 @@ void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
     *world_y = HEX_RADIUS * (sqrtf(3.0f) * (0.5f * tile_x - tile_y));
 }
 
-void renderer_run(_renderer* renderer, _world* world, _camera* camera)
+void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
 {
     shader_use(&renderer->shader);
+
+    float aspect = (float)window->width / (float)window->height;
+    float half_height = camera->zoom;
+    float half_width = half_height * aspect;
+
+    float projection[16];
+    mat4_ortho(projection, -half_width, half_width, -half_height, half_height, -1.0f, 1.0f);
+
+    float view[16];
+    mat4_translate(view, -camera->x, -camera->y, 0.0f);
+
+    shader_set_mat4(&renderer->shader, "uProjection", projection);
+    shader_set_mat4(&renderer->shader, "uView", view);
 
     for (int y = 0; y < world->height; y++)
     {
         for (int x = 0; x < world->width; x++)
         {
             _tile* tile = world_get_tile(world, x, y);
-
             renderer_draw_tile(renderer, camera, tile, x, y);
         }
     }

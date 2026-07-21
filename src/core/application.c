@@ -41,13 +41,19 @@ void application_init(_application* app)
 void application_run(_application* app)
 {
     app->is_running = true;
-   
-    _camera camera;
-    camera_init(&camera);
 
     _world world;
     world_init(&world, 5, 5);
     world_generate(&world);
+
+
+    _camera camera;
+    camera_init(&camera);
+
+    int center_x = (world.width - 1) / 2;
+    int center_y = (world.height - 1) / 2;
+    camera.x = 1.5f * center_x;
+    camera.y = 0.8660254f * ((0.5f * center_x) - center_y);
 
 
     _mesh obj;
@@ -85,7 +91,7 @@ void application_run(_application* app)
 
         camera_update(&camera, delta_time);
 
-        renderer_run(&app->renderer, &world, &camera);
+        renderer_run(&app->renderer, &world, &camera, &app->window);
 
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
