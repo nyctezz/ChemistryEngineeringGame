@@ -77,12 +77,12 @@ void application_run(_application* app)
     app->is_running = true;
 
     _world world;
-    world_init(&world, 5, 5);
+    world_init(&world, 15, 15);
     world_generate(&world);
 
 
     _camera camera;
-    camera_init(&camera, 0.0f, 0.0f, 5.0f, 4.0f);
+    camera_init(&camera, 0.0f, 0.0f, 5.0f, 10.0f, 4.0f);
 
 
     _mesh obj;
@@ -98,7 +98,7 @@ void application_run(_application* app)
         camera_update(&camera, app->timer.delta_time);
         renderer_run(&app->renderer, &world, &camera, &app->window);
 
-        // temporarily draw mesh manually, later wrap it in gameobject and renderer
+        // temporarily draw mesh manually, later wrap it inside gameobject and renderer
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
         mesh_draw(&obj);

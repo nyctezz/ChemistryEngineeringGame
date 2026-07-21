@@ -2,12 +2,13 @@
 
 #include <math.h>
 
-void camera_init(_camera* camera, float starting_x, float starting_y, float speed, float starting_zoom)
+void camera_init(_camera* camera, float starting_x, float starting_y, float speed, float fast_speed, float starting_zoom)
 {
     camera->x = starting_x;
     camera->y = starting_y;
 
     camera->speed = speed;
+    camera->fast_speed = fast_speed;
     camera->zoom = starting_zoom;
 }
 
@@ -44,13 +45,22 @@ void camera_update(_camera* camera, float delta_time)
     }
 
 
-    if (keyboard[SDL_SCANCODE_Q])
+    if (keyboard[SDL_SCANCODE_LCTRL])
     {
         camera->zoom = fmaxf(0.1f, camera->zoom - movement);
     }
 
-    if (keyboard[SDL_SCANCODE_E])
+    if (keyboard[SDL_SCANCODE_SPACE])
     {
         camera->zoom += movement;
+    }
+
+    if (keyboard[SDL_SCANCODE_LSHIFT])
+    {
+        camera->speed = 10.0f;
+    }
+    else
+    {
+        camera->speed = 5.0f;
     }
 }
