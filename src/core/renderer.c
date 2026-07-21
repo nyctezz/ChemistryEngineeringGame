@@ -74,9 +74,9 @@ int renderer_init(_renderer* renderer, _window* window)
     //TODO: write proper error handling for this:
     mesh_init_hex(&renderer->hex_mesh);
 
-    renderer->grass_texture = texture_load_png("assets/textures/debug.png");
-    renderer->water_texture = texture_load_png("assets/textures/debug.png");
-    renderer->rock_texture  = texture_load_png("assets/textures/debug.png");
+    renderer->grass_texture = texture_load_png("assets/textures/grass.png");
+    renderer->water_texture = texture_load_png("assets/textures/water.png");
+    renderer->rock_texture  = texture_load_png("assets/textures/rock.png");
 
     return 0;
 }
