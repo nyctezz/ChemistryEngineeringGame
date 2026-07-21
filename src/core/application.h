@@ -6,6 +6,7 @@
 #include <SDL3/SDL.h>
 
 #include "window.h"
+#include "camera.h"
 #include "renderer.h"
 #include "../graphics/shader.h"
 #include "../graphics/texture.h"

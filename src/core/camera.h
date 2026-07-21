@@ -1,0 +1,17 @@
+#pragma once
+
+#include <SDL3/SDL.h>
+
+typedef struct
+{
+    float x;
+    float y;
+
+    float speed;
+    float zoom;
+} _camera;
+
+void camera_init(_camera* camera);
+
+void camera_handle_event(_camera* camera, SDL_Event* event);
+void camera_update(_camera* camera, float delta_time);

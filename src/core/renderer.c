@@ -75,12 +75,16 @@ int renderer_init(_renderer* renderer, _window* window)
     return 0;
 }
 
-void renderer_draw_tile(_renderer* renderer, _tile* tile, int tile_x, int tile_y)
+void renderer_draw_tile(_renderer* renderer, _camera* camera, _tile* tile, int tile_x, int tile_y)
 {
     float world_x;
     float world_y;
 
     hex_to_world(tile_x, tile_y, &world_x, &world_y);
+
+    // Apply camera
+    world_x -= camera->x;
+    world_y -= camera->y;
 
     glActiveTexture(GL_TEXTURE0);
     switch(tile->type)
@@ -98,7 +102,7 @@ void renderer_draw_tile(_renderer* renderer, _tile* tile, int tile_x, int tile_y
             break;
     }
 
-    shader_set_vec2(&renderer->shader, "uTranslation", world_x, world_y);
+    shader_set_vec2( &renderer->shader, "uTranslation", world_x, world_y);
 
     mesh_draw(&renderer->hex_mesh);
 }
@@ -111,7 +115,7 @@ void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
     *world_y = HEX_RADIUS * (sqrtf(3.0f) * (0.5f * tile_x - tile_y));
 }
 
-void renderer_run(_renderer* renderer, _world* world)
+void renderer_run(_renderer* renderer, _world* world, _camera* camera)
 {
     shader_use(&renderer->shader);
 
@@ -121,7 +125,7 @@ void renderer_run(_renderer* renderer, _world* world)
         {
             _tile* tile = world_get_tile(world, x, y);
 
-            renderer_draw_tile(renderer, tile, x, y);
+            renderer_draw_tile(renderer, camera, tile, x, y);
         }
     }
 }

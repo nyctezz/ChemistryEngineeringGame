@@ -42,8 +42,10 @@ void application_run(_application* app)
 {
     app->is_running = true;
    
-    _world world;
+    _camera camera;
+    camera_init(&camera);
 
+    _world world;
     world_init(&world, 5, 5);
     world_generate(&world);
 
@@ -53,8 +55,15 @@ void application_run(_application* app)
     uint32_t my_texture = texture_load_png("assets/textures/dude.png");
 
 
+    uint64_t previous_time = SDL_GetTicks();
+
     while (app->is_running)
     {
+        uint64_t current_time = SDL_GetTicks();
+        float delta_time = (float)(current_time - previous_time) / 1000.0f;
+        previous_time = current_time;
+
+
         SDL_PollEvent(&app->event);
 
         switch (app->event.type)
@@ -74,12 +83,14 @@ void application_run(_application* app)
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT); 
 
-        renderer_run(&app->renderer, &world);
+        camera_update(&camera, delta_time);
+
+        renderer_run(&app->renderer, &world, &camera);
 
         glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
         glBindTexture(GL_TEXTURE_2D, my_texture);
 
-        mesh_draw(&obj);
+        //mesh_draw(&obj);
 
         SDL_GL_SwapWindow(app->window.handle);
     }
