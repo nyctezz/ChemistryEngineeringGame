@@ -67,28 +67,28 @@ void mesh_init_worldtile(_mesh* mesh)
 void mesh_init_hex(_mesh* mesh)
 {
     float vertices[] = {
-        // Position                  // UV
+        // Position                    // UV (Unstretched)
 
         // 0: center
-        0.0f,  0.0f, 0.0f,          0.5f,        0.5f,
+        0.0f,  0.0f,       0.0f,      0.5f,        0.5f,
 
         // 1: top-left
-        -0.5f,  0.8660254f, 0.0f,    0.25f,       1.0f,
+        -0.5f,  0.8660254f, 0.0f,      0.25f,       0.9330127f,
 
         // 2: top-right
-        0.5f,  0.8660254f, 0.0f,    0.75f,       1.0f,
+        0.5f,  0.8660254f, 0.0f,      0.75f,       0.9330127f,
 
         // 3: right
-        1.0f,  0.0f, 0.0f,          1.0f,        0.5f,
+        1.0f,  0.0f,       0.0f,      1.0f,        0.5f,
 
         // 4: bottom-right
-        0.5f, -0.8660254f, 0.0f,    0.75f,       0.0f,
+        0.5f, -0.8660254f, 0.0f,      0.75f,       0.0669873f,
 
         // 5: bottom-left
-        -0.5f, -0.8660254f, 0.0f,    0.25f,       0.0f,
+        -0.5f, -0.8660254f, 0.0f,      0.25f,       0.0669873f,
 
         // 6: left
-        -1.0f,  0.0f, 0.0f,          0.0f,        0.5f
+        -1.0f,  0.0f,       0.0f,      0.0f,        0.5f
     };
 
     uint32_t indices[] = {

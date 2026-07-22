@@ -124,8 +124,10 @@ void world_generate_base(_world* world, int radius) //generates the base terrain
             }
             else
             {
-                tile->type = TILE_GRASS;
+                tile->type = TILE_SCRAPOLITE;
             }
+
+            tile->type_under = TILE_NONE;
         }
     }
 }
@@ -137,7 +139,10 @@ void world_generate_water(_world* world, int radius) //generates water on tiles 
         for (int x = 0; x < world->width; x++)
         {
             _tile* tile = world_get_tile(world, x, y);
-            if (tile->type != TILE_GRASS) continue;
+            if (tile->type != TILE_SCRAPOLITE) 
+            {
+                continue;
+            }
 
             int centered_x = x - radius;
             int centered_y = y - radius;
@@ -146,8 +151,14 @@ void world_generate_water(_world* world, int radius) //generates water on tiles 
             float small_noise = value_noise_2d(centered_x, centered_y, 2.0f, world->seed + 1); //third argument is edge definition (higher value = more blob)
             float noise = large_noise * 0.8f + small_noise * 0.2f;
 
-            if (noise > 0.5f) //noise treshold (higher value = less water)
+            if (noise > 0.65f) //noise treshold (higher value = less water)
             {
+                tile->type = TILE_DEEP_WATER;
+            }
+            else if (noise > 0.5)
+            {
+                //put whatever tile it was as tile under water, then set water on top:
+                tile->type_under = tile->type;
                 tile->type = TILE_WATER;
             }
         }

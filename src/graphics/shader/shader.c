@@ -185,6 +185,15 @@ void shader_set_vec2(_shader* shader, const char* name, float x, float y)
     }
 }
 
+void shader_set_vec4(const _shader* shader, const char* name, float x, float y, float z, float w)
+{
+    GLint location = glGetUniformLocation(shader->shader_program, name);
+    if (location != -1)
+    {
+        glUniform4f(location, x, y, z, w);
+    }
+}
+
 void shader_set_mat4(_shader* shader, const char* name, mat4 matrix)
 {
     GLint location = glGetUniformLocation(shader->shader_program, name);

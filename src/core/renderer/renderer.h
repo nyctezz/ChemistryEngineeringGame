@@ -22,7 +22,7 @@ typedef struct
     //world rendering:
     _mesh hex_mesh;
 
-    GLuint grass_texture;
+    GLuint scrapolite_texture;
     GLuint water_texture;
     GLuint rock_texture;
 
