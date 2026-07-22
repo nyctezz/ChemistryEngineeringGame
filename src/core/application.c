@@ -10,7 +10,7 @@ void application_init(_application* app)
         abort();
     }
 
-    if (window_init(&app->window, "ChemistryEngineeringGame", 800, 600, false) == 1)
+    if (window_init(&app->window, "ChemistryEngineeringGame", 1600, 900, false) == 1)
     {
         printf("Window creation failed: %s\n", SDL_GetError());
         abort();
@@ -77,7 +77,7 @@ void application_run(_application* app)
     app->is_running = true;
 
     _world world;
-    world_init(&world, 21);
+    world_init(&world, 101, 194719207382);
 
 
     _camera camera;

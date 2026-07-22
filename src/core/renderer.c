@@ -127,30 +127,6 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
     glActiveTexture(GL_TEXTURE0);
 
-    /*
-    for (int y = 0; y < world->height; y++)
-    {
-        for (int x = 0; x < world->width; x++)
-        {
-            const _tile* tile = world_get_tile(world, x, y);
-
-            GLuint texture = renderer_get_tile_texture(renderer, tile->type);
-
-            if (texture == 0)
-            {
-                continue; //skip rendering this tile
-            }
-            if (texture != current_texture)
-            {
-                glBindTexture(GL_TEXTURE_2D, texture);
-                current_texture = texture;
-            }
-
-            renderer_draw_world_tile(renderer, tile, x, y);
-        }
-    }
-    */
-   
     for (int y = 0; y < world->height; y++)
     {
         for (int x = 0; x < world->width; x++)
