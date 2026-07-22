@@ -77,8 +77,7 @@ void application_run(_application* app)
     app->is_running = true;
 
     _world world;
-    world_init(&world, 15, 15);
-    world_generate(&world);
+    world_init(&world, 21);
 
 
     _camera camera;

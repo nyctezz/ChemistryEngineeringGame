@@ -1,6 +1,7 @@
 #pragma once
 
 typedef enum {
+    TILE_NONE,
     TILE_GRASS,
     TILE_WATER,
     TILE_ROCK

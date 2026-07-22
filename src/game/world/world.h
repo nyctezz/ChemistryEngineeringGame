@@ -1,5 +1,6 @@
 #pragma once
 
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -15,6 +16,6 @@ typedef struct {
 } _world;
 
 _tile* world_get_tile(_world* world, int x, int y);
-void world_init(_world* world, int width, int height);
-void world_generate(_world* world);
+void world_init(_world* world, int radius);
+void world_generate(_world* world, int radius);
 void world_destroy(_world* world);

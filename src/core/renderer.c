@@ -4,16 +4,17 @@
 // local helper functions:
 static void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
 {
-    //hex radius = 1.0f
-    //hex height = sqrt(3.0f) * hex radius
-    *world_x = 1.0f * 1.5f * tile_x;
-    *world_y = 1.0f * (sqrtf(3.0f) * (0.5f * tile_x - tile_y));
+    *world_x = 1.5f * tile_x;
+    *world_y = sqrtf(3.0f) * (tile_y + 0.5f * tile_x);
 }
 
 static GLuint renderer_get_tile_texture(const _renderer* renderer, _tile_type type)
 {
     switch (type)
     {
+        case TILE_NONE:
+            return 0;
+
         case TILE_GRASS:
             return renderer->grass_texture;
 
@@ -126,6 +127,7 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
     glActiveTexture(GL_TEXTURE0);
 
+    /*
     for (int y = 0; y < world->height; y++)
     {
         for (int x = 0; x < world->width; x++)
@@ -134,6 +136,10 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
             GLuint texture = renderer_get_tile_texture(renderer, tile->type);
 
+            if (texture == 0)
+            {
+                continue; //skip rendering this tile
+            }
             if (texture != current_texture)
             {
                 glBindTexture(GL_TEXTURE_2D, texture);
@@ -141,6 +147,33 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
             }
 
             renderer_draw_world_tile(renderer, tile, x, y);
+        }
+    }
+    */
+   
+    for (int y = 0; y < world->height; y++)
+    {
+        for (int x = 0; x < world->width; x++)
+        {
+            const _tile* tile = world_get_tile(world, x, y);
+
+            GLuint texture = renderer_get_tile_texture(renderer, tile->type);
+
+            if (texture == 0)
+            {
+                continue;
+            }
+
+            if (texture != current_texture)
+            {
+                glBindTexture(GL_TEXTURE_2D, texture);
+                current_texture = texture;
+            }
+
+            int centered_x = x - world->width / 2;
+            int centered_y = y - world->height / 2;
+
+            renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
         }
     }
 }
