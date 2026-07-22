@@ -11,8 +11,7 @@ float timer_get_delta_time(_timer* timer)
 {
     uint64_t current_time = SDL_GetTicksNS();
 
-    float delta_time =
-        (float)(current_time - timer->previous_time) / 1000000000.0f;
+    float delta_time = (float)(current_time - timer->previous_time) / 1000000000.0f;
 
     timer->previous_time = current_time;
 

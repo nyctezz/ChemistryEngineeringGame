@@ -77,7 +77,7 @@ void application_run(_application* app)
     app->is_running = true;
 
     _world world;
-    world_init(&world, 101, 194719282);
+    world_init(&world, 11, 194719282);
 
 
     _camera camera;
@@ -92,6 +92,8 @@ void application_run(_application* app)
     while (app->is_running)
     {
         app->timer.delta_time = timer_get_delta_time(&app->timer);
+
+        printf("\nfps: %0.2f", 1.0 / app->timer.delta_time);
 
         application_process_events(app);
         camera_update(&camera, app->timer.delta_time);
