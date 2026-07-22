@@ -5,15 +5,15 @@
 
 #include <SDL3/SDL.h>
 
-#include "window.h"
-#include "camera.h"
-#include "time.h"
-#include "renderer.h"
-#include "../graphics/shader.h"
-#include "../graphics/texture.h"
+#include "../window/window.h"
+#include "../camera/camera.h"
+#include "../time/time.h"
+#include "../renderer/renderer.h"
+#include "../../graphics/shader/shader.h"
+#include "../../graphics/texture/texture.h"
 //#include "../game/gameobject.h"
-#include "mesh.h" //comment it out later (move to gameobject)
-#include "../game/world/world.h"
+#include "../mesh/mesh.h" //comment it out later (move to gameobject)
+#include "../../game/world/world/world.h"
 
 
 typedef struct {

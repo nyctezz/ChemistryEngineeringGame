@@ -6,12 +6,12 @@
 #include <SDL3/SDL.h>
 #include <cglm/cglm.h>
 
-#include "window.h"
-#include "mesh.h"
-#include "camera.h"
-#include "../graphics/shader.h"
-#include "../game/world/world.h"
-#include "../graphics/texture.h"
+#include "../window/window.h"
+#include "../mesh/mesh.h"
+#include "../camera/camera.h"
+#include "../../graphics/shader/shader.h"
+#include "../../game/world/world/world.h"
+#include "../../graphics/texture/texture.h"
 
 
 typedef struct

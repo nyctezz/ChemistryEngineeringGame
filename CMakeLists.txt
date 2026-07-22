@@ -9,20 +9,19 @@ add_subdirectory(external/SDL)
 add_executable(ChemistryEngineeringGame
     src/main.c
 
-    src/core/window.c
-    src/core/application.c
-    src/core/time.c
-    src/core/renderer.c
-    src/core/mesh.c
-    src/core/camera.c
+    src/core/window/window.c
+    src/core/application/application.c
+    src/core/time/time.c
+    src/core/renderer/renderer.c
+    src/core/mesh/mesh.c
+    src/core/camera/camera.c
 
-    src/graphics/buffer.c
-    src/graphics/shader.c
-    src/graphics/texture.c
+    src/graphics/buffer/buffer.c
+    src/graphics/shader/shader.c
+    src/graphics/texture/texture.c
 
-    src/game/gameobject.c
-    src/game/world/world.c
-    src/game/world/tile.c
+    src/game/world/world/world.c
+    src/game/world/tile/tile.c
 
     external/glad/src/glad.c
 )

@@ -77,7 +77,7 @@ void application_run(_application* app)
     app->is_running = true;
 
     _world world;
-    world_init(&world, 101, 194719207382);
+    world_init(&world, 101, 194719282);
 
 
     _camera camera;
