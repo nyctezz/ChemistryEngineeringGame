@@ -146,23 +146,24 @@ void world_generate_base(_world* world, int radius) // generates the base terrai
 
             hex_to_world(centered_x, centered_y, &world_x, &world_y);
 
-            float distance = sqrtf(world_x * world_x + world_y * world_y);
+            // Precompute squared thresholds OUTSIDE the loop
+            const float radius_sq = radius * radius;
 
-            //_tile* tile = world_get_tile(world, x, y);
-
-            if (distance > radius)
+            const float inner_radius = radius - rock_border_thickness;
+            // Handle edge case where thickness > radius to prevent negative radius squared bugs
+            const float inner_radius_sq = (inner_radius > 0.0f) ? (inner_radius * inner_radius) : 0.0f;
+            // --- Inside loop ---
+            const float dist_sq = world_x * world_x + world_y * world_y;
+            if (dist_sq > radius_sq)
             {
-                //tile->type = TILE_NONE;
                 push_tile_to_stack(&world->stacks[TILE_NONE], x, y, TILE_NONE);
             }
-            else if (distance > (radius - rock_border_thickness))
+            else if (dist_sq > inner_radius_sq)
             {
-                //tile->type = TILE_ROCK;
                 push_tile_to_stack(&world->stacks[TILE_ROCK], x, y, TILE_NONE);
             }
             else
             {
-                //tile->type = TILE_SCAPOLITE;
                 push_tile_to_stack(&world->stacks[TILE_SCAPOLITE], x, y, TILE_NONE);
             }
         }
@@ -287,41 +288,24 @@ void world_generate(_world* world, int radius)
     // world_generate_deserts(world, radius);
 }
 
-/*
-void world_generate(_world* world, int radius)
+void world_generate_flat(_world* world, int x, int y)
 {
-    for (int y = 0; y < world->height; y++)
+    for (int tile_y = 0; tile_y < y; tile_y++)
     {
-        for (int x = 0; x < world->width; x++)
+        for (int tile_x = 0; tile_x < x; tile_x++)
         {
-            int centered_x = x - radius;
-            int centered_y = y - radius;
+            _tile_type type = TILE_SCAPOLITE;
 
-            float world_x;
-            float world_y;
-
-            hex_to_world(centered_x, centered_y, &world_x, &world_y);
-
-            float distance = sqrtf(world_x * world_x + world_y * world_y);
-
-            _tile* tile = world_get_tile(world, x, y);
-
-            if (distance > radius * 1.5f)
+            // Every 10th tile in both directions becomes rock.
+            if (tile_x % 10 == 0 || tile_y % 10 == 0)
             {
-                tile->type = TILE_NONE;
+                type = TILE_ROCK;
             }
-            else if (distance > radius * 1.2f)
-            {
-                tile->type = TILE_ROCK;
-            }
-            else
-            {
-                tile->type = TILE_GRASS;
-            }
+
+            push_tile_to_stack(&world->stacks[type], tile_x, tile_y, TILE_NONE);
         }
     }
 }
-*/
 
 void world_destroy(_world* world)
 {

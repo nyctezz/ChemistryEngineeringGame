@@ -5,7 +5,7 @@
 static void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
 {
     *world_x = 1.5f * tile_x;
-    *world_y = sqrtf(3.0f) * (tile_y + 0.5f * tile_x);
+    *world_y = 1.7320508f * (tile_y + 0.5f * tile_x);
 }
 
 static GLuint renderer_get_tile_texture(const _renderer* renderer, _tile_type type)
@@ -96,105 +96,11 @@ void renderer_draw_world_tile(_renderer* renderer, _tile* tile, int tile_x, int 
     float world_y;
 
     hex_to_world(tile_x, tile_y, &world_x, &world_y);
+
     shader_set_vec2(&renderer->shader, "uTranslation", world_x, world_y);
 
-    mesh_draw(&renderer->hex_mesh);
+    glDrawElements(GL_TRIANGLES, renderer->hex_mesh.index_count, GL_UNSIGNED_INT, NULL);
 }
-
-/* 
-this solution is HORRENDOUS T.T
-
-
-void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
-{
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    shader_use(&renderer->shader);
-
-    float aspect = (float)window->width / (float)window->height;
-
-    float half_height = camera->zoom;
-    float half_width = half_height * aspect;
-
-    mat4 projection;
-    glm_ortho(-half_width, half_width, -half_height, half_height, -1.0f, 1.0f, projection);
-
-    mat4 view;
-    glm_mat4_identity(view);
-
-    vec3 camera_position = {-camera->x, -camera->y, 0.0f};
-    glm_translate(view, camera_position);
-
-    shader_set_mat4(&renderer->shader, "uProjection", projection);
-    shader_set_mat4(&renderer->shader, "uView", view);
-
-
-    //alpha rendering
-    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
-
-
-    GLuint current_texture = 0;
-
-    glActiveTexture(GL_TEXTURE0);
-
-    for (int y = 0; y < world->height; y++)
-    {
-        for (int x = 0; x < world->width; x++)
-        {
-            const _tile* tile = world_get_tile(world, x, y);
-
-            if (tile->type == TILE_NONE)
-            {
-                continue;
-            }
-
-            GLuint texture = renderer_get_tile_texture(renderer, tile->type);
-
-            if (texture == 0)
-            {
-                continue;
-            }
-
-            int centered_x = x - world->width / 2;
-            int centered_y = y - world->height / 2;
-
-
-            if (tile->type_under != TILE_NONE) //if any texture is transparent and has something underneath:
-            {
-                //=-= double rendering with transparent water: =-=
-
-                // draw what's under water:
-                GLuint under_texture = renderer_get_tile_texture(renderer, tile->type_under);
-
-                glBindTexture(GL_TEXTURE_2D, under_texture);
-                current_texture = under_texture;
-
-                shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
-                renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
-
-
-
-                // draw transparend water underneath:
-                glBindTexture(GL_TEXTURE_2D, texture);
-                current_texture = texture;
-
-                shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 0.6f);
-                renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
-
-                shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);  // important to end with this set to 1.0f
-            }
-            else
-            {
-                glBindTexture(GL_TEXTURE_2D, texture);
-                current_texture = texture;
-
-                renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
-            }
-        }
-    }
-}
-*/
 
 void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
 {
@@ -250,9 +156,11 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
             continue;
         }
 
+        //bind texture and hex VAO outside the loop
         glBindTexture(GL_TEXTURE_2D, texture);
+        glBindVertexArray(renderer->hex_mesh.vao);
 
-        for (size_t i = 0; i < stack->count; i++)
+        for (size_t i = 0; i < stack->count; i++) // draw batch of the same object
         {
             _tile* tile = &stack->tiles[i];
 
@@ -261,6 +169,8 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
             renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
         }
+
+        glBindVertexArray(0); //unbind VAO at the end of the batch
     }
 
 
@@ -273,6 +183,8 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
         if (water_texture != 0)
         {
+            glBindVertexArray(renderer->hex_mesh.vao); //bind VAO outside the loop
+
             for (size_t i = 0; i < water_stack->count; i++)
             {
                 _tile* tile = &water_stack->tiles[i];
@@ -300,6 +212,8 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
                 renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
             }
+
+            glBindVertexArray(0); //unbind VAO at the end of the batch
         }
     }
 

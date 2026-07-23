@@ -23,4 +23,5 @@ typedef struct {
 _tile* world_get_tile(_world* world, int x, int y);
 void world_init(_world* world, int radius, uint32_t seed);
 void world_generate(_world* world, int radius);
+void world_generate_flat(_world* world, int x, int y);
 void world_destroy(_world* world);
