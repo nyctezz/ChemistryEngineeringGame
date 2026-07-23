@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -14,7 +15,8 @@ typedef struct {
 
     uint32_t seed;
 
-    _tile* tiles;
+    //_tile* tiles;
+    _tile_stack* stacks; // array of tile stacks, (all tiles sum up to world size)
 
 } _world;
 

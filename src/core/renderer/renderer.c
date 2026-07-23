@@ -16,7 +16,7 @@ static GLuint renderer_get_tile_texture(const _renderer* renderer, _tile_type ty
             return 0;
 
         case TILE_SCAPOLITE:
-            return renderer->scrapolite_texture;
+            return renderer->scapolite_texture;
 
         case TILE_WATER:
             return renderer->water_texture;
@@ -63,7 +63,7 @@ int renderer_init(_renderer* renderer, _window* window)
     shader_set_int(&renderer->shader, "ourTexture", 0);
     
     // set rendering options:
-    SDL_GL_SetSwapInterval(1); //vsync on
+    SDL_GL_SetSwapInterval(0); //vsync on
 
     // set up viewport on window properly:
     update_viewport(window);
@@ -78,7 +78,7 @@ int renderer_init(_renderer* renderer, _window* window)
     //TODO: write proper error handling for this:
     mesh_init_hex(&renderer->hex_mesh);
 
-    renderer->scrapolite_texture = texture_load_png("assets/textures/scapolite.png");
+    renderer->scapolite_texture = texture_load_png("assets/textures/scapolite.png");
     renderer->water_texture = texture_load_png("assets/textures/water.png");
     renderer->rock_texture  = texture_load_png("assets/textures/rock.png");
 
@@ -100,6 +100,10 @@ void renderer_draw_world_tile(_renderer* renderer, _tile* tile, int tile_x, int 
 
     mesh_draw(&renderer->hex_mesh);
 }
+
+/* 
+this solution is HORRENDOUS T.T
+
 
 void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
 {
@@ -187,26 +191,126 @@ void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* 
 
                 renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
             }
-
-            /*
-            if (texture != current_texture)
-            {
-                glBindTexture(GL_TEXTURE_2D, texture);
-                current_texture = texture;
-            }
-            
-
-            renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
-            */
         }
     }
+}
+*/
+
+void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
+{
+    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    shader_use(&renderer->shader);
+
+    float aspect = (float)window->width / (float)window->height;
+
+    float half_height = camera->zoom;
+    float half_width = half_height * aspect;
+
+    mat4 projection;
+    glm_ortho(-half_width, half_width, -half_height, half_height, -1.0f, 1.0f, projection);
+
+    mat4 view;
+    glm_mat4_identity(view);
+
+    vec3 camera_position = {-camera->x, -camera->y, 0.0f};
+    glm_translate(view, camera_position);
+
+    shader_set_mat4(&renderer->shader, "uProjection", projection);
+    shader_set_mat4(&renderer->shader, "uView", view);
+
+    glActiveTexture(GL_TEXTURE0);
+
+    // alpha blending
+    glEnable(GL_BLEND); // TODO: check if I'm not doing those two settings when initializing 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+
+    // Render opaque terrain
+    for (int type = TILE_SCAPOLITE; type < COUNT_TILE_TYPES; type++) //in enum type1 is 0, type2 is 1, do until you hit COUNT_TILE_TYPES (which is last), start on first tile
+    {
+        if (type == TILE_WATER) //skip water
+        {
+            continue;
+        }
+
+        _tile_stack* stack = &world->stacks[type];
+
+        if (stack->count == 0) //skip if empty
+        {
+            continue;
+        }
+
+        GLuint texture = renderer_get_tile_texture(renderer, type);
+
+        if (texture == 0) //skip
+        {
+            continue;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        for (size_t i = 0; i < stack->count; i++)
+        {
+            _tile* tile = &stack->tiles[i];
+
+            int centered_x = tile->x - world->width / 2;
+            int centered_y = tile->y - world->height / 2;
+
+            renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
+        }
+    }
+
+
+    // render water
+    _tile_stack* water_stack = &world->stacks[TILE_WATER];
+
+    if (water_stack->count > 0) // skip if no water
+    {
+        GLuint water_texture = renderer_get_tile_texture(renderer, TILE_WATER);
+
+        if (water_texture != 0)
+        {
+            for (size_t i = 0; i < water_stack->count; i++)
+            {
+                _tile* tile = &water_stack->tiles[i];
+
+                int centered_x = tile->x - world->width / 2;
+                int centered_y = tile->y - world->height / 2;
+
+                // render the tile underneath the water
+                GLuint under_texture = renderer_get_tile_texture(renderer, tile->type_under);
+
+                if (under_texture != 0)
+                {
+                    glBindTexture(GL_TEXTURE_2D, under_texture);
+
+                    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+
+                    renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
+                }
+
+
+                // Render transparent water on top.
+                glBindTexture(GL_TEXTURE_2D, water_texture);
+
+                shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 0.6f);
+
+                renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
+            }
+        }
+    }
+
+    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void renderer_destroy(_renderer* renderer)
 {
     mesh_destroy(&renderer->hex_mesh);
 
-    glDeleteTextures(1, &renderer->scrapolite_texture);
+    glDeleteTextures(1, &renderer->scapolite_texture);
     glDeleteTextures(1, &renderer->water_texture);
     glDeleteTextures(1, &renderer->rock_texture);
 

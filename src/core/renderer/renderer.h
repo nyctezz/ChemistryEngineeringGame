@@ -22,7 +22,8 @@ typedef struct
     //world rendering:
     _mesh hex_mesh;
 
-    GLuint scrapolite_texture;
+    //TODO: enum (from tile.h) and array this
+    GLuint scapolite_texture;
     GLuint water_texture;
     GLuint rock_texture;
 
