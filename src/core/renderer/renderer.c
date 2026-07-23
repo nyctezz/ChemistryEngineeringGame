@@ -15,7 +15,7 @@ static GLuint renderer_get_tile_texture(const _renderer* renderer, _tile_type ty
         case TILE_NONE:
             return 0;
 
-        case TILE_SCRAPOLITE:
+        case TILE_SCAPOLITE:
             return renderer->scrapolite_texture;
 
         case TILE_WATER:

@@ -124,7 +124,7 @@ void world_generate_base(_world* world, int radius) //generates the base terrain
             }
             else
             {
-                tile->type = TILE_SCRAPOLITE;
+                tile->type = TILE_SCAPOLITE;
             }
 
             tile->type_under = TILE_NONE;
@@ -139,7 +139,7 @@ void world_generate_water(_world* world, int radius) //generates water on tiles 
         for (int x = 0; x < world->width; x++)
         {
             _tile* tile = world_get_tile(world, x, y);
-            if (tile->type != TILE_SCRAPOLITE) 
+            if (tile->type != TILE_SCAPOLITE) 
             {
                 continue;
             }
@@ -164,7 +164,6 @@ void world_generate_water(_world* world, int radius) //generates water on tiles 
         }
     }
 }
-
 
 // ---------------
 

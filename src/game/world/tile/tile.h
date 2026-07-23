@@ -2,7 +2,7 @@
 
 typedef enum {
     TILE_NONE,
-    TILE_SCRAPOLITE,
+    TILE_SCAPOLITE,
     TILE_WATER,
     TILE_DEEP_WATER,
     TILE_ROCK
