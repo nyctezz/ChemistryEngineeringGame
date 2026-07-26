@@ -2,10 +2,10 @@
 
 
 // local helper functions:
-static void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y)
+static void hex_to_world(int tile_x, int tile_y, float* world_x, float* world_y) // given axial (hexagon) coordinates, returns center of the hexagon in cartesian (world) coordinates
 {
     *world_x = 1.5f * tile_x;
-    *world_y = 1.7320508f * (tile_y + 0.5f * tile_x);
+    *world_y = 1.7320508f * (tile_y + 0.5f * tile_x); // sqrt(3) = 1.7320508f
 }
 
 static GLuint renderer_get_tile_texture(const _renderer* renderer, _tile_type type)
@@ -59,9 +59,6 @@ int renderer_init(_renderer* renderer, _window* window)
         return 3;
     }
 
-    shader_use(&renderer->shader);
-    shader_set_int(&renderer->shader, "ourTexture", 0);
-    
     // set rendering options:
     SDL_GL_SetSwapInterval(0); //vsync on
 
@@ -102,7 +99,7 @@ void renderer_draw_world_tile(_renderer* renderer, _tile* tile, int tile_x, int 
     glDrawElements(GL_TRIANGLES, renderer->hex_mesh.index_count, GL_UNSIGNED_INT, NULL);
 }
 
-void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window)
+void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* camera)
 {
     glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);

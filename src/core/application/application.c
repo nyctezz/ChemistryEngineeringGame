@@ -10,7 +10,7 @@ void application_init(_application* app)
         abort();
     }
 
-    if (window_init(&app->window, "ChemistryEngineeringGame", 1600, 900, false) == 1)
+    if (window_init(&app->window, "ChemistryEngineeringGame", 1600, 900, false) != 0)
     {
         printf("Window creation failed: %s\n", SDL_GetError());
         abort();
@@ -51,7 +51,6 @@ void application_process_events(_application* app)
                 break;
 
             case SDL_EVENT_WINDOW_RESIZED:
-            {
                 int width  = app->event.window.data1;
                 int height = app->event.window.data2;
 
@@ -64,7 +63,6 @@ void application_process_events(_application* app)
                 }
 
                 break;
-            }
 
             default:
                 break;
@@ -76,48 +74,24 @@ void application_run(_application* app)
 {
     app->is_running = true;
 
+
     _world world;
-    world_init(&world, 101, 194719282);
+    world_init(&world, 101, 194719281);
 
 
     _camera camera;
     camera_init(&camera, 0.0f, 0.0f, 5.0f, 10.0f, 4.0f);
 
 
-    //_mesh obj;
-    //mesh_init_quad(&obj);
-    //uint32_t my_texture = texture_load_png("assets/textures/dude.png");
-
-
-    static int frames = 0;
-    static float elapsed = 0.0f;
-
     while (app->is_running)
     {
-        app->timer.delta_time = timer_get_delta_time(&app->timer);
-
-        frames++;
-        elapsed += app->timer.delta_time;
-
-        if (elapsed >= 1.0f)
-        {
-            printf("FPS: %d\n", frames);
-
-            frames = 0;
-            elapsed = 0.0f;
-        }
-
-        //printf("\nfps: %0.2f", 1.0 / app->timer.delta_time);
-
         application_process_events(app);
-        camera_update(&camera, app->timer.delta_time);
-        renderer_run(&app->renderer, &world, &camera, &app->window);
 
-        // temporarily draw mesh manually, later wrap it inside gameobject and renderer
-        //glActiveTexture(GL_TEXTURE0); // Activate texture unit 0
-        //glBindTexture(GL_TEXTURE_2D, my_texture);
-        //mesh_draw(&obj);
-        // ---
+        timer_update(&app->timer);
+        timer_print_fps(&app->timer);
+
+        camera_update(&camera, app->timer.delta_time);
+        renderer_run(&app->renderer, &app->window, &world, &camera);
 
         SDL_GL_SwapWindow(app->window.handle);
     }

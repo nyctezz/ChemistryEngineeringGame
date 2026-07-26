@@ -32,5 +32,5 @@ typedef struct
 int renderer_init(_renderer* renderer, _window* window);
 void update_viewport(_window* window);
 void renderer_draw_world_tile(_renderer* renderer, _tile* tile, int tile_x, int tile_y);
-void renderer_run(_renderer* renderer, _world* world, _camera* camera, _window* window);
+void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* camera);
 void renderer_destroy(_renderer* renderer);

@@ -1,7 +1,7 @@
 #include "core/application/application.h"
 
 
-int main(int argc, char *argv[])
+int main()
 {
     _application app;
 
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 }
 
 /*
-=-=-= conventions I use: =-=-=
+=-=-=> conventions I use: <=-=-=
 
 [1] functions can return different kinds of errors, 0 is success, {1, 2, ...} are error codes
 
@@ -21,4 +21,9 @@ int main(int argc, char *argv[])
 
 [3] in .h modules I use '#pragma once' instead of include guards
 
+[4] .h and matching .c files are in the folder with the same name
+
+[5] when adding a new .c module, remember to add it to 'CMakeLists.txt' in 'add_executable()'
+
+--------------------------------
 */
