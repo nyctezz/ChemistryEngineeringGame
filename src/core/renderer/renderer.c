@@ -94,7 +94,9 @@ void renderer_draw_world_tile(_renderer* renderer, _tile* tile, int tile_x, int 
 
     hex_to_world(tile_x, tile_y, &world_x, &world_y);
 
-    shader_set_vec2(&renderer->shader, "uTranslation", world_x, world_y);
+    //instead of doing string lookup every time, make use of cached info in shader
+    //shader_set_vec2(&renderer->shader, "uTranslation", world_x, world_y);
+    glUniform2f(renderer->shader.uTranslation_loc, world_x, world_y);
 
     glDrawElements(GL_TRIANGLES, renderer->hex_mesh.index_count, GL_UNSIGNED_INT, NULL);
 }
@@ -120,8 +122,11 @@ void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* 
     vec3 camera_position = {-camera->x, -camera->y, 0.0f};
     glm_translate(view, camera_position);
 
-    shader_set_mat4(&renderer->shader, "uProjection", projection);
-    shader_set_mat4(&renderer->shader, "uView", view);
+    //instead of doing string lookup every time, make use of cached info in shader
+    //shader_set_mat4(&renderer->shader, "uProjection", projection);
+    glUniformMatrix4fv(renderer->shader.uProjection_loc, 1, GL_FALSE, (float*)projection);
+    //shader_set_mat4(&renderer->shader, "uView", view);
+    glUniformMatrix4fv(renderer->shader.uView_loc, 1, GL_FALSE, (float*)view);
 
     glActiveTexture(GL_TEXTURE0);
 
@@ -129,7 +134,10 @@ void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* 
     glEnable(GL_BLEND); // TODO: check if I'm not doing those two settings when initializing 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+    //instead of doing string lookup every time, make use of cached info in shader
+    //shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+    glUniform4f(renderer->shader.uColorTint_loc, 1.0f, 1.0f, 1.0f, 1.0f);
+
 
     // Render opaque terrain
     for (int type = TILE_SCAPOLITE; type < COUNT_TILE_TYPES; type++) //in enum type1 is 0, type2 is 1, do until you hit COUNT_TILE_TYPES (which is last), start on first tile
@@ -196,7 +204,9 @@ void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* 
                 {
                     glBindTexture(GL_TEXTURE_2D, under_texture);
 
-                    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+                    //instead of doing string lookup every time, make use of cached info in shader
+                    //shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+                    glUniform4f(renderer->shader.uColorTint_loc, 1.0f, 1.0f, 1.0f, 1.0f);
 
                     renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
                 }
@@ -205,7 +215,9 @@ void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* 
                 // Render transparent water on top.
                 glBindTexture(GL_TEXTURE_2D, water_texture);
 
-                shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 0.6f);
+                //instead of doing string lookup every time, make use of cached info in shader
+                //shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 0.6f);
+                glUniform4f(renderer->shader.uColorTint_loc, 1.0f, 1.0f, 1.0f, 0.6f);
 
                 renderer_draw_world_tile(renderer, tile, centered_x, centered_y);
             }
@@ -214,7 +226,9 @@ void renderer_run(_renderer* renderer, _window* window, _world* world, _camera* 
         }
     }
 
-    shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+    //instead of doing string lookup every time, make use of cached info in shader
+    //shader_set_vec4(&renderer->shader, "uColorTint", 1.0f, 1.0f, 1.0f, 1.0f);
+    glUniform4f(renderer->shader.uColorTint_loc, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void renderer_destroy(_renderer* renderer)

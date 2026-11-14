@@ -160,7 +160,15 @@ int shader_init(_shader* shader, const char* vert_shader_path, const char* frag_
     }
 
 
-    // cleanupm, shaders are linked, we don't need them anymore
+    // cache shader details in shader struct so that we don't make expensive lookups every call, but have close in memory:
+    shader->uTranslation_loc = glGetUniformLocation(shader->shader_program, "uTranslation");
+    shader->uProjection_loc = glGetUniformLocation(shader->shader_program, "uProjection");
+    shader->uTranslation_loc = glGetUniformLocation(shader->shader_program, "uTranslation");
+    shader->uView_loc = glGetUniformLocation(shader->shader_program, "uView");
+    shader->uColorTint_loc = glGetUniformLocation(shader->shader_program, "uColorTint");
+
+
+    // cleanup, shaders are linked, we don't need them anymore
     glDeleteShader(shader->vertex_shader);
     glDeleteShader(shader->fragment_shader);
 

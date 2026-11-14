@@ -76,11 +76,11 @@ void application_run(_application* app)
 
 
     _world world;
-    world_init(&world, 101, 194719281);
+    world_init(&world, 59, 194719281);
 
 
     _camera camera;
-    camera_init(&camera, 0.0f, 0.0f, 5.0f, 10.0f, 4.0f);
+    camera_init(&camera, 0.0f, 0.0f, 5.0f, 20.0f, 4.0f);
 
 
     while (app->is_running)

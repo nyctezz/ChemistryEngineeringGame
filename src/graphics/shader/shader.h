@@ -10,6 +10,12 @@ typedef struct {
     unsigned int vertex_shader;
     unsigned int fragment_shader;
     unsigned int shader_program;
+
+    // fix for shader_set_vec2 < string lookup, EVERY call. To fix it we cache everything it uses:
+    GLint uTranslation_loc;
+    GLint uProjection_loc;
+    GLint uView_loc;
+    GLint uColorTint_loc;
 } _shader;
 
 
